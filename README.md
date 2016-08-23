@@ -1,6 +1,6 @@
 turbojpeg-fpc
 =============
-[turbojpeg](http://www.libjpeg-turbo.org/) binding for the Free Pascal Compiler
+[turbojpeg](http://www.libjpeg-turbo.org/) header binding for the Free Pascal Compiler aka FPC
 
 Download
 --------
