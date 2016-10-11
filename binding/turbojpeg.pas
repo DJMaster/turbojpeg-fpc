@@ -618,7 +618,7 @@ function tjInitCompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB, grayscale, or
- * CMYK pixels to be compressed.
+ * CMYK pixels to be compressed
  *
  * @param width width (in pixels) of the source image
  *
@@ -671,7 +671,7 @@ function tjInitCompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjCompress2(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; pjpegBuf: pcuchar; jpegSize: pculong; jpegSubsamp: cint; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjCompress2(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; jpegBuf: ppcuchar; jpegSize: pculong; jpegSubsamp: cint; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -916,7 +916,7 @@ function tjPlaneHeight(componentID: cint; height: cint; subsamp: cint): cint; cd
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB or grayscale pixels
- * to be encoded.
+ * to be encoded
  *
  * @param width width (in pixels) of the source image
  *
@@ -967,7 +967,7 @@ function tjEncodeYUV3(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pit
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB or grayscale pixels
- * to be encoded.
+ * to be encoded
  *
  * @param width width (in pixels) of the source image
  *
@@ -1387,7 +1387,7 @@ function tjInitTransform(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjTransform(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; n: cint; pdstBufs: pcuchar; dstSizes: pculong; transforms: ptjtransform_; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjTransform(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; n: cint; dstBufs: ppcuchar; dstSizes: pculong; transforms: ptjtransform_; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
