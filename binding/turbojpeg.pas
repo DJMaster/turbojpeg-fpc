@@ -44,7 +44,7 @@ uses
 
 const
   LIB_TURBOJPEG = 'libturbojpeg-0.dll';
-  TURBOJPEG_VERSION = '1.4.2';
+  TURBOJPEG_VERSION = '1.5.1';
 
 type
   ppcuchar = ^pcuchar;
@@ -618,7 +618,7 @@ function tjInitCompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB, grayscale, or
- * CMYK pixels to be compressed.  This buffer is not modified.
+ * CMYK pixels to be compressed.
  *
  * @param width width (in pixels) of the source image
  *
@@ -671,7 +671,7 @@ function tjInitCompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjCompress2(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; pjpegBuf: pcuchar; jpegSize: pculong; jpegSubsamp: cint; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjCompress2(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; pjpegBuf: pcuchar; jpegSize: pculong; jpegSubsamp: cint; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -684,7 +684,7 @@ function tjCompress2(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: cin
  * #tjBufSizeYUV2() for the given image width, height, padding, and level of
  * chrominance subsampling.  The Y, U (Cb), and V (Cr) image planes should be
  * stored sequentially in the source buffer (refer to @ref YUVnotes
- * "YUV Image Format Notes".)  This buffer is not modified.
+ * "YUV Image Format Notes".)
  *
  * @param width width (in pixels) of the source image.  If the width is not an
  * even multiple of the MCU block width (see #tjMCUWidth), then an intermediate
@@ -733,7 +733,7 @@ function tjCompress2(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: cin
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjCompressFromYUV(handle_: tjhandle; srcBuf: pcuchar; width: cint; pad: cint; height: cint; subsamp: cint; pjpegBuf: pcuchar; jpegSize: pculong; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjCompressFromYUV(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pad: cint; height: cint; subsamp: cint; jpegBuf: ppcuchar; jpegSize: pculong; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -747,7 +747,7 @@ function tjCompressFromYUV(handle_: tjhandle; srcBuf: pcuchar; width: cint; pad:
  * memory.  The size of each plane should match the value returned by
  * #tjPlaneSizeYUV() for the given image width, height, strides, and level of
  * chrominance subsampling.  Refer to @ref YUVnotes "YUV Image Format Notes"
- * for more details.  These image planes are not modified.
+ * for more details.
  *
  * @param width width (in pixels) of the source image.  If the width is not an
  * even multiple of the MCU block width (see #tjMCUWidth), then an intermediate
@@ -801,7 +801,7 @@ function tjCompressFromYUV(handle_: tjhandle; srcBuf: pcuchar; width: cint; pad:
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjCompressFromYUVPlanes(handle_: tjhandle; srcPlanes: ppcuchar; width: cint; strides: pcint; height: cint; subsamp: cint; jpegBuf: ppcuchar; jpegSize: pculong; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjCompressFromYUVPlanes(handle_: tjhandle; const srcPlanes: ppcuchar; width: cint; const strides: pcint; height: cint; subsamp: cint; jpegBuf: ppcuchar; jpegSize: pculong; jpegQual: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -916,7 +916,7 @@ function tjPlaneHeight(componentID: cint; height: cint; subsamp: cint): cint; cd
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB or grayscale pixels
- * to be encoded.  This buffer is not modified.
+ * to be encoded.
  *
  * @param width width (in pixels) of the source image
  *
@@ -955,7 +955,7 @@ function tjPlaneHeight(componentID: cint; height: cint; subsamp: cint): cint; cd
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjEncodeYUV3(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; dstBuf: pcuchar; pad: cint; subsamp: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjEncodeYUV3(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; dstBuf: pcuchar; pad: cint; subsamp: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -967,7 +967,7 @@ function tjEncodeYUV3(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: ci
  * @param handle a handle to a TurboJPEG compressor or transformer instance
  *
  * @param srcBuf pointer to an image buffer containing RGB or grayscale pixels
- * to be encoded.  This buffer is not modified.
+ * to be encoded.
  *
  * @param width width (in pixels) of the source image
  *
@@ -1011,7 +1011,7 @@ function tjEncodeYUV3(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: ci
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjEncodeYUVPlanes(handle_: tjhandle; srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; dstPlanes: ppcuchar; strides: pcint; subsamp: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjEncodeYUVPlanes(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; dstPlanes: ppcuchar; strides: pcint; subsamp: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1028,8 +1028,7 @@ function tjInitDecompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @param handle a handle to a TurboJPEG decompressor or transformer instance
  *
- * @param jpegBuf pointer to a buffer containing a JPEG image.  This buffer is
- * not modified.
+ * @param jpegBuf pointer to a buffer containing a JPEG image
  *
  * @param jpegSize size of the JPEG image (in bytes)
  *
@@ -1049,7 +1048,7 @@ function tjInitDecompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
 *)
-function tjDecompressHeader3(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; width: pcint; height: pcint; jpegSubsamp: pcint; jpegColorspace: pcint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecompressHeader3(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; width: pcint; height: pcint; jpegSubsamp: pcint; jpegColorspace: pcint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1070,8 +1069,7 @@ function tjGetScalingFactors(numscalingfactors: pcint): ptjscalingfactor; cdecl;
  *
  * @param handle a handle to a TurboJPEG decompressor or transformer instance
  *
- * @param jpegBuf pointer to a buffer containing the JPEG image to decompress.
- * This buffer is not modified.
+ * @param jpegBuf pointer to a buffer containing the JPEG image to decompress
  *
  * @param jpegSize size of the JPEG image (in bytes)
  *
@@ -1115,7 +1113,7 @@ function tjGetScalingFactors(numscalingfactors: pcint): ptjscalingfactor; cdecl;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjDecompress2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecompress2(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1125,8 +1123,7 @@ function tjDecompress2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; ds
  *
  * @param handle a handle to a TurboJPEG decompressor or transformer instance
  *
- * @param jpegBuf pointer to a buffer containing the JPEG image to decompress.
- * This buffer is not modified.
+ * @param jpegBuf pointer to a buffer containing the JPEG image to decompress
  *
  * @param jpegSize size of the JPEG image (in bytes)
  *
@@ -1164,7 +1161,7 @@ function tjDecompress2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; ds
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjDecompressToYUV2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; dstBuf: pcuchar; width: cint; pad: cint; height: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecompressToYUV2(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; dstBuf: pcuchar; width: cint; pad: cint; height: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1174,8 +1171,7 @@ function tjDecompressToYUV2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culon
  *
  * @param handle a handle to a TurboJPEG decompressor or transformer instance
  *
- * @param jpegBuf pointer to a buffer containing the JPEG image to decompress.
- * This buffer is not modified.
+ * @param jpegBuf pointer to a buffer containing the JPEG image to decompress
  *
  * @param jpegSize size of the JPEG image (in bytes)
  *
@@ -1219,7 +1215,7 @@ function tjDecompressToYUV2(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culon
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjDecompressToYUVPlanes(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; dstPlanes: ppcuchar; width: cint; strides: pcint; height: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecompressToYUVPlanes(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; dstPlanes: ppcuchar; width: cint; strides: pcint; height: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1235,7 +1231,7 @@ function tjDecompressToYUVPlanes(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: 
  * #tjBufSizeYUV2() for the given image width, height, padding, and level of
  * chrominance subsampling.  The Y, U (Cb), and V (Cr) image planes should be
  * stored sequentially in the source buffer (refer to @ref YUVnotes
- * "YUV Image Format Notes".)  This buffer is not modified.
+ * "YUV Image Format Notes".)
  *
  * @param pad Use this parameter to specify that the width of each line in each
  * plane of the YUV source image is padded to the nearest multiple of this
@@ -1269,7 +1265,7 @@ function tjDecompressToYUVPlanes(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: 
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjDecodeYUV(handle_: tjhandle; srcBuf: pcuchar; pad: cint; subsamp: cint; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecodeYUV(handle_: tjhandle; const srcBuf: pcuchar; pad: cint; subsamp: cint; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1286,7 +1282,7 @@ function tjDecodeYUV(handle_: tjhandle; srcBuf: pcuchar; pad: cint; subsamp: cin
  * The size of each plane should match the value returned by #tjPlaneSizeYUV()
  * for the given image width, height, strides, and level of chrominance
  * subsampling.  Refer to @ref YUVnotes "YUV Image Format Notes" for more
- * details.  These image planes are not modified.
+ * details.
  *
  * @param strides an array of integers, each specifying the number of bytes per
  * line in the corresponding plane of the YUV source image.  Setting the stride
@@ -1324,7 +1320,7 @@ function tjDecodeYUV(handle_: tjhandle; srcBuf: pcuchar; pad: cint; subsamp: cin
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjDecodeYUVPlanes(handle_: tjhandle; srcPlanes: ppcuchar; strides: pcint; subsamp: cint; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjDecodeYUVPlanes(handle_: tjhandle; const srcPlanes: ppcuchar; const strides: pcint; subsamp: cint; dstBuf: pcuchar; width: cint; pitch: cint; height: cint; pixelFormat: cint; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
@@ -1352,7 +1348,7 @@ function tjInitTransform(): tjhandle; cdecl; external LIB_TURBOJPEG;
  * @param handle a handle to a TurboJPEG transformer instance
  *
  * @param jpegBuf pointer to a buffer containing the JPEG source image to
- * transform.  This buffer is not modified.
+ * transform
  *
  * @param jpegSize size of the JPEG source image (in bytes)
  *
@@ -1391,7 +1387,7 @@ function tjInitTransform(): tjhandle; cdecl; external LIB_TURBOJPEG;
  *
  * @return 0 if successful, or -1 if an error occurred (see #tjGetErrorStr().)
  *)
-function tjTransform(handle_: tjhandle; jpegBuf: pcuchar; jpegSize: culong; n: cint; pdstBufs: pcuchar; dstSizes: pculong; transforms: ptjtransform_; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
+function tjTransform(handle_: tjhandle; const jpegBuf: pcuchar; jpegSize: culong; n: cint; pdstBufs: pcuchar; dstSizes: pculong; transforms: ptjtransform_; flags: cint): cint; cdecl; external LIB_TURBOJPEG;
 
 
 (**
