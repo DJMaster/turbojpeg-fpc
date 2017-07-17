@@ -5,7 +5,7 @@
 //
 
 (*
- * Copyright (C)2009-2015 D. R. Commander.  All Rights Reserved.
+ * Copyright (C)2009-2015, 2017 D. R. Commander.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ uses
 
 const
   LIB_TURBOJPEG = 'libturbojpeg-0.dll';
-  TURBOJPEG_VERSION = '1.5.1';
+  TURBOJPEG_VERSION = '1.5.2';
 
 type
   ppcuchar = ^pcuchar;
@@ -367,11 +367,11 @@ const
    *)
   TJFLAG_FASTUPSAMPLE = 256;
   (**
-   * Disable buffer (re)allocation.  If passed to #tjCompress2() or
-   * #tjTransform(), this flag will cause those functions to generate an error if
-   * the JPEG image buffer is invalid or too small rather than attempting to
-   * allocate or reallocate that buffer.  This reproduces the behavior of earlier
-   * versions of TurboJPEG.
+   * Disable buffer (re)allocation.  If passed to one of the JPEG compression or
+   * transform functions, this flag will cause those functions to generate an
+   * error if the JPEG image buffer is invalid or too small rather than
+   * attempting to allocate or reallocate that buffer.  This reproduces the
+   * behavior of earlier versions of TurboJPEG.
    *)
   TJFLAG_NOREALLOC = 1024;
   (**
@@ -644,7 +644,7 @@ function tjInitCompress(): tjhandle; cdecl; external LIB_TURBOJPEG;
  * for you, or
  * -# pre-allocate the buffer to a "worst case" size determined by calling
  * #tjBufSize().  This should ensure that the buffer never has to be
- * re-allocated (setting #TJFLAG_NOREALLOC guarantees this.)
+ * re-allocated (setting #TJFLAG_NOREALLOC guarantees that it won't be.)
  * .
  * If you choose option 1, <tt>*jpegSize</tt> should be set to the size of your
  * pre-allocated buffer.  In any case, unless you have set #TJFLAG_NOREALLOC,
@@ -710,7 +710,7 @@ function tjCompress2(handle_: tjhandle; const srcBuf: pcuchar; width: cint; pitc
  * for you, or
  * -# pre-allocate the buffer to a "worst case" size determined by calling
  * #tjBufSize().  This should ensure that the buffer never has to be
- * re-allocated (setting #TJFLAG_NOREALLOC guarantees this.)
+ * re-allocated (setting #TJFLAG_NOREALLOC guarantees that it won't be.)
  * .
  * If you choose option 1, <tt>*jpegSize</tt> should be set to the size of your
  * pre-allocated buffer.  In any case, unless you have set #TJFLAG_NOREALLOC,
@@ -778,7 +778,7 @@ function tjCompressFromYUV(handle_: tjhandle; const srcBuf: pcuchar; width: cint
  * for you, or
  * -# pre-allocate the buffer to a "worst case" size determined by calling
  * #tjBufSize().  This should ensure that the buffer never has to be
- * re-allocated (setting #TJFLAG_NOREALLOC guarantees this.)
+ * re-allocated (setting #TJFLAG_NOREALLOC guarantees that it won't be.)
  * .
  * If you choose option 1, <tt>*jpegSize</tt> should be set to the size of your
  * pre-allocated buffer.  In any case, unless you have set #TJFLAG_NOREALLOC,
@@ -1363,9 +1363,13 @@ function tjInitTransform(): tjhandle; cdecl; external LIB_TURBOJPEG;
  * -# set <tt>dstBufs[i]</tt> to NULL to tell TurboJPEG to allocate the buffer
  * for you, or
  * -# pre-allocate the buffer to a "worst case" size determined by calling
- * #tjBufSize() with the transformed or cropped width and height.  This should
- * ensure that the buffer never has to be re-allocated (setting
- * #TJFLAG_NOREALLOC guarantees this.)
+ * #tjBufSize() with the transformed or cropped width and height.  Under normal
+ * circumstances, this should ensure that the buffer never has to be
+ * re-allocated (setting #TJFLAG_NOREALLOC guarantees that it won't be.)  Note,
+ * however, that there are some rare cases (such as transforming images with a
+ * large amount of embedded EXIF or ICC profile data) in which the output image
+ * will be larger than the worst-case size, and #TJFLAG_NOREALLOC cannot be
+ * used in those cases.
  * .
  * If you choose option 1, <tt>dstSizes[i]</tt> should be set to the size of
  * your pre-allocated buffer.  In any case, unless you have set
@@ -1403,8 +1407,8 @@ function tjDestroy(handle_: tjhandle): cint; cdecl; external LIB_TURBOJPEG;
 
 (**
  * Allocate an image buffer for use with TurboJPEG.  You should always use
- * this function to allocate the JPEG destination buffer(s) for #tjCompress2()
- * and #tjTransform() unless you are disabling automatic buffer
+ * this function to allocate the JPEG destination buffer(s) for the compression
+ * and transform functions unless you are disabling automatic buffer
  * (re)allocation (by setting #TJFLAG_NOREALLOC.)
  *
  * @param bytes the number of bytes to allocate
@@ -1420,8 +1424,8 @@ function tjAlloc(bytes: cint): pcuchar; cdecl; external LIB_TURBOJPEG;
 (**
  * Free an image buffer previously allocated by TurboJPEG.  You should always
  * use this function to free JPEG destination buffer(s) that were automatically
- * (re)allocated by #tjCompress2() or #tjTransform() or that were manually
- * allocated using #tjAlloc().
+ * (re)allocated by the compression and transform functions or that were
+ * manually allocated using #tjAlloc().
  *
  * @param buffer address of the buffer to free
  *
