@@ -44,7 +44,7 @@ uses
 
 const
   LIB_TURBOJPEG = 'libturbojpeg.dll';
-  TURBOJPEG_VERSION = '2.0.4';
+  TURBOJPEG_VERSION = '2.0.5';
 
 type
   ppcuchar = ^pcuchar;
